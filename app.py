@@ -9,7 +9,8 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 
-os.environ["OPENAI_API_KEY"] = # ENTER_HERE
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv())  # read local .env file
 
 load_dotenv()
 from PIL import Image

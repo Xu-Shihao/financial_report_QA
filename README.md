@@ -1,15 +1,18 @@
-# Finaatial Report QA
+# Generative Financial Report Q&A Chatbot
 
-## Aboout the Project
-This is a Python application that allows you to load a PDF and ask questions about it using natural language. The application uses a LLM to generate a response about your PDF. The LLM will not answer questions unrelated to the document. The application reads the PDF and splits the text into smaller chunks that can be then fed into a LLM. It uses OpenAI embeddings to create vector representations of the chunks. The application then finds the chunks that are semantically similar to the question that the user asked and feeds those chunks to the LLM to generate a response. Here is the Proof of Concept.
+## Introduction
+Welcome to our GitHub repository for the Generative Financial Report Q&A Chatbot. This project aims to develop an innovative chatbot that leverages the power of natural language processing to provide factual answers to user queries, specifically focused on the financial reports of large listed public companies.
 
-## Images of Proof of Concept
+## Objective
+Our primary objective is to create a generative chatbot that can accurately answer questions related to the financial reports of big public companies. This chatbot will utilize a custom-built knowledge base, generated from PDF files of financial reports, ensuring that all provided information is grounded in verified data.
 
-![logo](https://github.com/KalyanMurapaka45/DocGenius-Revolutionizing-PDFs-with-AI/blob/main/Outputs/Screenshot%202023-05-15%20212935.png)
+## Problem Statement
+The challenge lies in developing a chatbot capable of understanding and interpreting complex financial data encapsulated in the reports of large public companies. The bot is designed to:
 
-![logo](https://github.com/KalyanMurapaka45/DocGenius-Revolutionizing-PDFs-with-AI/blob/main/Outputs/Screenshot%202023-05-15%20213027.png)
+- Reference a knowledge base created exclusively from the provided financial reports in PDF format.
+- Minimize errors and hallucinations in generating responses.
+- Deliver precise and accurate information to the user queries.
 
- 
 #  Installation 
 
 ```
