@@ -345,7 +345,7 @@ st.set_page_config(page_title="Generative Financial Report Q&A Chatbot", page_ic
 st.header("Ask the PDF corpus📄")
 
 filenames = glob.glob("docs/*pdf")
-model_names = ["BM25", "mixedbread-ai/mxbai-embed-large-v1", "BAAI/bge-large-en-v1.5"]
+model_names = ["BM25", "text-embedding-ada-002"] #,"mixedbread-ai/mxbai-embed-large-v1", "BAAI/bge-large-en-v1.5"]
 chunks = load_doc_chunks(chunk_size = 500, qa_full_dataset_name = qa_full_dataset_name)
 knowledge_base = kb_initialization(model_names, chunk_size  = 500)  # ER
 
