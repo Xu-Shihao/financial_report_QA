@@ -13,7 +13,7 @@ The challenge lies in developing a chatbot capable of understanding and interpre
 - Minimize errors and hallucinations in generating responses.
 - Deliver precise and accurate information to the user queries.
 
-#  Installation 
+##  Installation 
 
 ```
 pip install -r requirements.txt
@@ -26,3 +26,12 @@ pip install -r requirements.txt
 ```
 streamlit run app.py
 ```
+
+## Dataset
+
+The pdfs was downloaded from the web and stored in the ./docs folder.
+
+The automatic QA dataset generation code is QA_dataset_generation.ipynb, and the qa pairs are stored in the QA_dataset_v2.json (simple) and QA_dataset_v3.json (hard).
+
+## Contact
+xushihao6715@gmail.com
