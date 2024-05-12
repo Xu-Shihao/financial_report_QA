@@ -29,11 +29,6 @@ _ = load_dotenv(find_dotenv())  # read local .env file
 qa_full_dataset_name = "QA_dataset_v2"  # Define dataset name
 TOP_K = 5
 
-os.makedirs("./results", exist_ok=True)
-os.makedirs("./faiss", exist_ok=True)
-os.makedirs("./BM25", exist_ok=True)
-os.makedirs("./chunks", exist_ok=True)
-
 Query_paraphrase_prompt = """
 # Character
 You are a proficient assistant specializing in query paraphrasing. Your primary function is to break down complex inquiries into smaller, manageable chunks, if the original query encompasses multi-hop problems.
@@ -155,45 +150,26 @@ Ground truth is: {}
 Predicted answer is: {}
 """
 
-
-
-def save_pk(chunks, file_path):
-    with open(file_path, "wb") as file:
-        pickle.dump(chunks, file)
-
-def load_pk(file_path):
-    with open(file_path, "rb") as file:
-        return pickle.load(file)
-
 @st.cache_resource
 def load_doc_chunks(chunk_size, qa_full_dataset_name):
     
     chunks = []
-    file_path = f"./chunks/chunks_{chunk_size}_{qa_full_dataset_name}.pkl" 
-    
+
     text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=chunk_size,
         chunk_overlap=chunk_size//5,
         length_function=len
     )
-    try:
-        # Check if the chunks file already exists
-        chunks = load_pk(file_path)
-        print("Loaded chunks from existing file. ", file_path)
-    except FileNotFoundError:
-        # If the file does not exist, process the PDFs
-        chunks = []
-        for pdf in tqdm(glob.glob("./docs/*.pdf")):
-            pdf_reader = PdfReader(pdf)
-            text = ""
-            for page in pdf_reader.pages:
-                text += page.extract_text() if page.extract_text() else ""
-            chunks += text_splitter.split_text(text)
-        
-        # Save the chunks to a file after processing
-        save_pk(chunks, file_path)
-        print("Saved new chunks to file. ", file_path)
+
+    chunks = []
+    for pdf in tqdm(glob.glob("./docs/*.pdf")):
+        pdf_reader = PdfReader(pdf)
+        text = ""
+        for page in pdf_reader.pages:
+            text += page.extract_text() if page.extract_text() else ""
+        chunks += text_splitter.split_text(text)
+    
     return chunks
 
 @st.cache_resource
@@ -211,27 +187,19 @@ def kb_initialization(model_names, chunk_size):
         if model_name == "text-embedding-ada-002":
             embeddings = OpenAIEmbeddings(model=model_name)
         elif model_name != "BM25":
-            embeddings = HuggingFaceBgeEmbeddings(model_name=model_name, model_kwargs = {'device': 'cuda:0'},encode_kwargs = {'normalize_embeddings': True})
+            embeddings = HuggingFaceBgeEmbeddings(model_name=model_name, model_kwargs = {'device': 'cpu'},encode_kwargs = {'normalize_embeddings': True})
 
         # load retriever
-        if not os.path.exists(index_path):
-            if chunks == []:
-                chunks = load_doc_chunks(chunk_size, qa_full_dataset_name)
-            if model_name == "BM25":
-                retriever = BM25Retriever.from_texts(chunks, metadatas=[{"source": 1}] * len(chunks))
-                retriever.k = TOP_K
-                save_pk(retriever, index_path)
-            else:
-                faiss_vectorstore = FAISS.from_texts(chunks, embeddings)
-                faiss_vectorstore.save_local(index_path)
-                retriever = faiss_vectorstore.as_retriever(search_kwargs={"k": TOP_K})
+        if chunks == []:
+            chunks = load_doc_chunks(chunk_size, qa_full_dataset_name)
+        if model_name == "BM25":
+            retriever = BM25Retriever.from_texts(chunks, metadatas=[{"source": 1}] * len(chunks))
+            retriever.k = TOP_K
         else:
-            if model_name == "BM25":
-                retriever = load_pk(index_path)
-                retriever.k = TOP_K
-            else:
-                faiss_vectorstore = FAISS.load_local(index_path, embeddings, allow_dangerous_deserialization=True)
-                retriever = faiss_vectorstore.as_retriever(search_kwargs={"k": TOP_K})
+            faiss_vectorstore = FAISS.from_texts(chunks, embeddings)
+            faiss_vectorstore.save_local(index_path)
+            retriever = faiss_vectorstore.as_retriever(search_kwargs={"k": TOP_K})
+
         retrievers.append(retriever)
         
     # initialize the ensemble retriever
