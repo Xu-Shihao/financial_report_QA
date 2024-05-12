@@ -306,11 +306,11 @@ def gpt_llm(system_prompt, user_prompt):
     return response.choices[0].message.content
 
 from PIL import Image
-img = Image.open(r".\images.jpeg")
+img = Image.open("images.jpeg")
 st.set_page_config(page_title="Generative Financial Report Q&A Chatbot", page_icon= img)
 st.header("Ask the PDF corpus📄")
 
-filenames = glob.glob("./docs/*pdf")
+filenames = glob.glob("docs/*pdf")
 model_names = ["BM25", "mixedbread-ai/mxbai-embed-large-v1", "BAAI/bge-large-en-v1.5"]
 chunks = load_doc_chunks(chunk_size = 500, qa_full_dataset_name = qa_full_dataset_name)
 knowledge_base = kb_initialization(model_names, chunk_size  = 500)  # ER
