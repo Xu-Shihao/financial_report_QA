@@ -7,3 +7,4 @@ streamlit
 tqdm
 rank_bm25
 sentence_transformers
+PyCryptodome
