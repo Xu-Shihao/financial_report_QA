@@ -26,6 +26,14 @@ import streamlit as st
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())  # read local .env file
 
+qa_full_dataset_name = "QA_dataset_v2"  # Define dataset name
+TOP_K = 5
+
+os.makedirs("./results", exist_ok=True)
+os.makedirs("./faiss", exist_ok=True)
+os.makedirs("./BM25", exist_ok=True)
+os.makedirs("./chunks", exist_ok=True)
+
 Query_paraphrase_prompt = """
 # Character
 You are a proficient assistant specializing in query paraphrasing. Your primary function is to break down complex inquiries into smaller, manageable chunks, if the original query encompasses multi-hop problems.
@@ -148,8 +156,6 @@ Predicted answer is: {}
 """
 
 
-qa_full_dataset_name = "QA_dataset_v2"  # Define dataset name
-TOP_K = 5
 
 def save_pk(chunks, file_path):
     with open(file_path, "wb") as file:

@@ -15,11 +15,14 @@ The challenge lies in developing a chatbot capable of understanding and interpre
 
 ##  Installation 
 
+1. install libraries
 ```
 pip install -r requirements.txt
 ```
 
 ```You will also need to add your OpenAI API key to the .env file.```
+
+2. put your pdfs into the ./docs folder
 
 3. To use the application, run the ```app.py``` file with the streamlit CLI (after having installed streamlit):
 
@@ -27,16 +30,13 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Dataset
+## Experiment
 
 The pdfs was downloaded from the web and stored in the ./docs folder.
 
 The automatic QA dataset generation code is QA_dataset_generation.ipynb, and the qa pairs are stored in the QA_dataset_v2.json (simple) and QA_dataset_v3.json (hard).
 
-
-## Experiment
-
-The experiment scripts are shown in the Jupyter notebooks.
+The experiment scripts are inside the Jupyter notebooks.
 
 ## Contact
 xushihao6715@gmail.com
