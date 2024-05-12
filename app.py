@@ -339,21 +339,26 @@ st.header("Ask the PDF corpus📄")
 filenames = glob.glob("./docs/*pdf")
 model_names = ["BM25", "mixedbread-ai/mxbai-embed-large-v1", "BAAI/bge-large-en-v1.5"]
 chunks = load_doc_chunks(chunk_size = 500, qa_full_dataset_name = qa_full_dataset_name)
-knowledge_base = kb_initialization(model_names, chunk_size  = 500) 
+knowledge_base = kb_initialization(model_names, chunk_size  = 500)  # ER
 
 st.info(f'There are {len(filenames)} PDF files in the corpus.', icon="ℹ️")
 st.info(f'They are split into {len(chunks)} segments.', icon="ℹ️")
 
 query = st.text_input("Ask your Question about your PDF")
 if query:
-     # QP + Hyde
-    decomposed_queries = query_paraphrasing(Query_paraphrase_prompt, query)
     
-    docs = []
-    for dq in decomposed_queries:
-        rfr = gpt_llm(Hyde_sys_prompt, dq)
-        docs = knowledge_base.invoke(rfr)
+    # Naive RAG
+    docs = knowledge_base.invoke(query)
     docs = list(set([docs[i].page_content for i in range(len(docs))]))
+    
+    # # QP + Hyde
+    # decomposed_queries = query_paraphrasing(Query_paraphrase_prompt, query)
+    
+    # docs = []
+    # for dq in decomposed_queries:
+    #     rfr = gpt_llm(Hyde_sys_prompt, dq)
+    #     docs = knowledge_base.invoke(rfr)
+    # docs = list(set([docs[i].page_content for i in range(len(docs))]))
 
     QA_prompt = QA_user_prompt.format("\n".join(docs), query)
     response = gpt_llm(QA_sys_prompt, QA_prompt)

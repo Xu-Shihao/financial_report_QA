@@ -33,5 +33,10 @@ The pdfs was downloaded from the web and stored in the ./docs folder.
 
 The automatic QA dataset generation code is QA_dataset_generation.ipynb, and the qa pairs are stored in the QA_dataset_v2.json (simple) and QA_dataset_v3.json (hard).
 
+
+## Experiment
+
+The experiment scripts are shown in the Jupyter notebooks.
+
 ## Contact
 xushihao6715@gmail.com
